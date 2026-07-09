@@ -1,7 +1,7 @@
 /* i2c.c - TWI hardware del ATmega328 a pelo, sin Wire.h.
- * Bus a 400kHz (fast mode). El MAX30102 aguanta 400k de sobra; probe 100k
- * al principio y la FIFO se llenaba antes de vaciarla a 100Hz con
- * promediado x4, asi que subi a 400k y arreglado. */
+ * Bus a 400kHz (fast mode). El MAX30102 soporta 400k sin problema, y conviene
+ * usarlo: a 100kHz, con promediado x4 y muestreo a 100Hz, el margen para vaciar
+ * la FIFO antes de que se llene es ajustado. A 400k queda holgado. */
 #include <avr/io.h>
 #include "i2c.h"
 
@@ -18,7 +18,7 @@ void i2c_init(void) {
 
 static uint8_t i2c_start(void) {
     TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-    while (!(TWCR & (1 << TWINT)));   /* ~pocos us, no es delay ciego */
+    while (!(TWCR & (1 << TWINT)));   /* espera al flag, ~us, no delay ciego */
     return (TWSR & 0xF8);
 }
 
@@ -48,9 +48,9 @@ void max3010x_write_reg(uint8_t reg, uint8_t val) {
     i2c_stop();
 }
 
-/* Lee 'len' bytes desde 'reg'. Hay que hacer repeated-start, NO un stop
- * entre la direccion de registro y la lectura, o el sensor pierde el
- * puntero de la FIFO. Me comi un rato por esto la primera vez. */
+/* Lee 'len' bytes desde 'reg'. Importante: hay que usar repeated-start, NO un
+ * stop entre la direccion de registro y la lectura, o el sensor pierde el
+ * puntero de la FIFO. Es el error clasico con la FIFO del MAX3010x. */
 void max3010x_read(uint8_t reg, uint8_t *buf, uint8_t len) {
     i2c_start();
     i2c_write(MAX3010X_ADDR << 1);

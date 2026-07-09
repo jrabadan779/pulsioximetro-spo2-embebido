@@ -1,15 +1,15 @@
 /* main.c - Bucle principal 100% no bloqueante.
  * Ni un solo delay() en toda la aplicacion. El ritmo lo marca el Timer1;
  * el main solo reacciona a banderas. Mientras no hay nada que hacer el MCU
- * podria dormir (sleep), lo dejo en busy-wait por simplicidad de depuracion. */
+ * podria dormir (sleep); lo dejo en busy-wait por simplicidad. */
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "i2c.h"
 #include "timer.h"
 
-/* Config del MAX30102 para modo SpO2. Las corrientes de LED (0x1F ~6.4mA)
- * son un punto de partida; hay que ajustarlas segun el dedo para dejar la
- * DC ~medio rango del ADC. Con dedos frios o piel gruesa toca subir. */
+/* Config del MAX30102 para modo SpO2. Las corrientes de LED (0x1F ~6.4mA) son
+ * un punto de partida razonable segun el datasheet; el valor optimo depende del
+ * dedo (grosor, perfusion) y se ajustaria para dejar la DC ~medio rango del ADC. */
 static void max3010x_setup(void) {
     max3010x_write_reg(0x09, 0x40);   /* reset */
     max3010x_write_reg(0x08, 0x4F);   /* FIFO: promedio x4, rollover on */
@@ -26,8 +26,8 @@ int main(void) {
     sei();
 
     for (;;) {
-        /* Espera pasiva al tick. No es delay: es "no hagas nada hasta que
-         * el timer marque los 10ms". Se cumple 100 veces/seg, ni una mas. */
+        /* Espera pasiva al tick. No es delay: es "no hagas nada hasta que el
+         * timer marque los 10ms". Se cumple 100 veces/seg, ni una mas. */
         if (tick_flag) {
             tick_flag = 0;
 
@@ -37,8 +37,7 @@ int main(void) {
             uint32_t red = ((uint32_t)buf[0] << 16 | (uint32_t)buf[1] << 8 | buf[2]) & 0x3FFFF;
             uint32_t ir  = ((uint32_t)buf[3] << 16 | (uint32_t)buf[4] << 8 | buf[5]) & 0x3FFFF;
 
-            /* Aqui iria spo2_process(red, ir) del modulo de DSP en punto fijo.
-             * (void) para silenciar el warning de no usadas en este esqueleto. */
+            /* Aqui iria spo2_process(red, ir) del modulo de DSP en punto fijo. */
             (void)red; (void)ir;
         }
         /* main libre para otras tareas (LED de estado, UART...) sin bloquear. */
