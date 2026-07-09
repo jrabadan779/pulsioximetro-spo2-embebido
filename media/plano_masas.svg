@@ -1,0 +1,72 @@
+<svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="820" height="560" fill="#0d1117"/>
+  <text x="20" y="34" font-size="17" font-weight="700" fill="#ffffff">PCB 2 capas — Separación de planos de masa (floorplan)</text>
+  <text x="20" y="54" font-size="12" fill="#94a3b8">Vista de la capa inferior (plano de masa) con partición analógica / digital</text>
+
+  <!-- Board outline -->
+  <rect x="60" y="80" width="700" height="420" rx="10" fill="#111827" stroke="#3f6212" stroke-width="3"/>
+
+  <!-- Digital ground region (right) -->
+  <rect x="410" y="95" width="335" height="390" rx="6" fill="#1e3a5f" fill-opacity="0.55" stroke="#60a5fa" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="577" y="120" font-size="14" font-weight="700" fill="#93c5fd" text-anchor="middle">PLANO DIGITAL (GND)</text>
+
+  <!-- Analog ground region (left) -->
+  <rect x="75" y="95" width="300" height="390" rx="6" fill="#14352a" fill-opacity="0.55" stroke="#4ade80" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="225" y="120" font-size="14" font-weight="700" fill="#86efac" text-anchor="middle">PLANO ANALÓGICO (AGND)</text>
+
+  <!-- The moat / split gap -->
+  <rect x="378" y="95" width="30" height="390" fill="#0d1117"/>
+  <text x="393" y="300" font-size="11" fill="#f59e0b" text-anchor="middle" transform="rotate(90 393 300)">SEPARACIÓN (moat, sin cobre)</text>
+
+  <!-- Single star point bridge -->
+  <rect x="378" y="430" width="30" height="34" fill="#f59e0b"/>
+  <circle cx="393" cy="447" r="7" fill="#fbbf24" stroke="#0d1117" stroke-width="2"/>
+  <text x="393" y="482" font-size="10.5" font-weight="700" fill="#fbbf24" text-anchor="middle">STAR POINT</text>
+  <text x="393" y="496" font-size="9.5" fill="#fcd34d" text-anchor="middle">único puente AGND↔GND</text>
+
+  <!-- Components: MAX30102 (analog side) -->
+  <rect x="120" y="180" width="130" height="80" rx="6" fill="#4a1d1d" stroke="#f87171" stroke-width="2"/>
+  <text x="185" y="212" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">MAX30102</text>
+  <text x="185" y="230" font-size="10" fill="#fca5a5" text-anchor="middle">sensor óptico + LEDs</text>
+  <text x="185" y="246" font-size="9.5" fill="#fca5a5" text-anchor="middle">(picos de corriente LED)</text>
+
+  <!-- Decoupling caps near sensor -->
+  <rect x="120" y="285" width="60" height="34" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="150" y="306" font-size="9.5" fill="#e2e8f0" text-anchor="middle">100nF+1µF</text>
+  <rect x="192" y="285" width="58" height="34" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="221" y="306" font-size="9.5" fill="#e2e8f0" text-anchor="middle">10µF LED</text>
+
+  <!-- Power / LDO 1.8V (analog side) -->
+  <rect x="120" y="360" width="140" height="60" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+  <text x="190" y="386" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">LDO 1.8V + filtro</text>
+  <text x="190" y="403" font-size="9.5" fill="#cbd5e1" text-anchor="middle">alimentación sensor</text>
+
+  <!-- Components: ATmega328 (digital side) -->
+  <rect x="470" y="180" width="150" height="100" rx="6" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2"/>
+  <text x="545" y="222" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">ATmega328P</text>
+  <text x="545" y="240" font-size="10" fill="#93c5fd" text-anchor="middle">MCU + osc 16MHz</text>
+  <text x="545" y="256" font-size="9.5" fill="#93c5fd" text-anchor="middle">(ruido de conmutación)</text>
+
+  <!-- ISP / UART headers digital side -->
+  <rect x="650" y="180" width="80" height="44" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="690" y="199" font-size="10" fill="#e2e8f0" text-anchor="middle">ISP 6pin</text>
+  <text x="690" y="214" font-size="10" fill="#e2e8f0" text-anchor="middle">UART</text>
+
+  <!-- Decoupling MCU -->
+  <rect x="470" y="300" width="150" height="34" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="545" y="321" font-size="9.5" fill="#e2e8f0" text-anchor="middle">100nF x VCC + 10µF bulk</text>
+
+  <!-- I2C bus crossing -->
+  <line x1="250" y1="210" x2="470" y2="210" stroke="#a78bfa" stroke-width="2.5"/>
+  <text x="360" y="200" font-size="11" font-weight="700" fill="#c4b5fd" text-anchor="middle">I2C (SDA/SCL) + INT</text>
+  <text x="360" y="228" font-size="9" fill="#a78bfa" text-anchor="middle">cruza el moat por señal, no por cobre</text>
+
+  <!-- Pull-ups -->
+  <rect x="330" y="150" width="90" height="26" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="375" y="167" font-size="9.5" fill="#e2e8f0" text-anchor="middle">pull-ups 4.7k</text>
+
+  <!-- Legend -->
+  <text x="60" y="530" font-size="10.5" fill="#86efac">■ AGND: sensor, LEDs, alimentación 1.8V</text>
+  <text x="430" y="530" font-size="10.5" fill="#93c5fd">■ GND: MCU, oscilador, cabeceras, digital</text>
+  <text x="60" y="548" font-size="10.5" fill="#fbbf24">● Star point: unión única de ambos planos, junto a la entrada de alimentación</text>
+</svg>

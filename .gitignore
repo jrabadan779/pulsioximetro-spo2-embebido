@@ -1,0 +1,6 @@
+﻿__pycache__/
+*.pyc
+*.elf
+dataset/
+*.zip
+.vscode/
